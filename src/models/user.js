@@ -19,6 +19,18 @@ const userSchema = new mongoose.Schema({
   ipAddress: {
     type: String,
   },
+  age: {
+    type : Number
+  },
+  allergies: {
+    type: String
+  },
+  pref: {
+    type: String
+  },
+  cuisine: {
+    type: String
+  }
 }, {
   timestamps: true,
 });
