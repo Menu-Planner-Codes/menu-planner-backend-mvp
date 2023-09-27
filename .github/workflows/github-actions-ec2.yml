@@ -33,4 +33,3 @@ jobs:
             sudo apt-get -y update
             cd home
             sudo npm install
-            sudo npm start run
