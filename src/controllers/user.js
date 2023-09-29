@@ -38,7 +38,7 @@ module.exports = {
                     data: { token, userWithoutPassword }
                 });
             }else{
-                res.status(400).json({ status: 400, message: "Wrong Password" });
+                res.status(400).json({ status: 400, message: "Wrong Password!" });
             }
 
         } catch (error) {
