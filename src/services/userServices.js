@@ -36,13 +36,14 @@ module.exports = {
 
     authenticate: async (user, userObj, tokenExpiry = '60d') => {
         try {
-          if (bcrypt.compare(user.password, userObj.password)) {
+          if (await bcrypt.compare(user.password, userObj.password)) {
             const token = jwt.sign({ userId: userObj.id }, process.env.JWT_CRED, {
               expiresIn: tokenExpiry
             });
             return token;
+          }else{
+            return null;
           }
-          return false;
         } catch (error) {
           throw new Error(error);
         }
