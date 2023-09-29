@@ -11,13 +11,23 @@ module.exports = {
             if (existingUser) {
                 throw new Error('User with the same email already exists');
             }
-            
             const hashedPassword = await bcrypt.hash(userObj.password, 10);
             const newUser = await userDao.createUser({
                 ...userObj,
                 password: hashedPassword
             });
-            return newUser;
+
+            delete newUser.password;
+
+            const tokenExpiry = '60d'
+            const token = jwt.sign({ userId: userObj.id }, process.env.JWT_CRED, {
+                expiresIn: tokenExpiry
+            });
+            const userWithoutPassword = newUser;
+            return {
+                token,
+                userWithoutPassword
+            };
         } catch (error) {
             console.log(error);
             throw new Error(error.message);

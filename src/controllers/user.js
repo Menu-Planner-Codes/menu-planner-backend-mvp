@@ -7,8 +7,11 @@ module.exports = {
     register: async (req, res) => {
         try {
             const newUser = await userServices.createUser(req.body);
-            delete newUser.password;
-            res.json(newUser);
+            return res.json({
+                status: 200,
+                message: 'Login sucessful',
+                data: newUser
+            });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
