@@ -1,5 +1,5 @@
 const userDao = require('../dao/userDao');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto-js');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -11,10 +11,11 @@ module.exports = {
             if (existingUser) {
                 throw new Error('User with the same email already exists');
             }
-            const hashedPassword = await bcrypt.hash(userObj.password, 10);
+
+            var ciphertext = crypto.AES.encrypt(userObj.password, 'asdfghjkl').toString();
             const newUser = await userDao.createUser({
                 ...userObj,
-                password: hashedPassword
+                password: ciphertext
             });
 
             delete newUser.password;
@@ -34,14 +35,17 @@ module.exports = {
         }
     },
 
-    authenticate: async (user, userObj, tokenExpiry = '60d') => {
+   authenticate: async (user, userObj, tokenExpiry = '60d') => {
         try {
-          if (await bcrypt.compare(user.password, userObj.password)) {
-            const token = jwt.sign({ userId: userObj.id }, process.env.JWT_CRED, {
-              expiresIn: tokenExpiry
-            });
-            return token;
-          }else{
+            var bytes  = crypto.AES.decrypt(user.password, 'asdfghjkl');
+            var originalText = bytes.toString(crypto.enc.Utf8);
+            console.log(originalText);
+            if (originalText == userObj.password) {
+                const token = jwt.sign({ userId: user.id }, process.env.JWT_CRED, {
+                  expiresIn: tokenExpiry
+                });
+                return token;
+            }else{
             return null;
           }
         } catch (error) {
