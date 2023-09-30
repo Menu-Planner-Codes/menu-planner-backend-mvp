@@ -65,7 +65,7 @@ module.exports = {
                 criteria.Course = { $in: ['Lunch', 'Main Course'] };
                 const lunch = await DishDao.getOneTimeMeal(criteria);
                 criteria.Course = "Side Dish";
-                const sideDish = await DishDao.getDishesByCriteria(criteria);
+                const sideDish = await DishDao.getOneTimeMeal(criteria);
                 return {
                     "Lunch": lunch,
                     "Side Dish": sideDish
@@ -80,9 +80,9 @@ module.exports = {
                 criteria.Course = "Main Course";
                 const dinner = await DishDao.getOneTimeMeal(criteria);
                 criteria.Course = "Side Dish";
-                const sideDish = await DishDao.getDishesByCriteria(criteria);
+                const sideDish = await DishDao.getOneTimeMeal(criteria);
                 criteria.Course = "Dessert";
-                const dessert = await DishDao.getDishesByCriteria(criteria);
+                const dessert = await DishDao.getOneTimeMeal(criteria);
                 return {
                     "Dinner": dinner,
                     "Side Dish": sideDish,
